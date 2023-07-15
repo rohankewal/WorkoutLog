@@ -27,10 +27,12 @@ class SetData {
 }
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -39,31 +41,33 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.teal,
         scaffoldBackgroundColor: Colors.grey[200],
         textTheme: TextTheme(
-          headline6: TextStyle(
+          titleLarge: TextStyle(
             color: Colors.grey[800],
             fontWeight: FontWeight.bold,
             fontSize: 20.0,
           ),
         ),
       ),
-      home: WorkoutListPage(),
+      home: const WorkoutListPage(),
     );
   }
 }
 
 class WorkoutListPage extends StatefulWidget {
+  const WorkoutListPage({super.key});
+
   @override
   _WorkoutListPageState createState() => _WorkoutListPageState();
 }
 
 class _WorkoutListPageState extends State<WorkoutListPage> {
-  List<WorkoutLog> _workoutLogs = [];
+  final List<WorkoutLog> _workoutLogs = [];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Workout Log'),
+        title: const Text('Workout Log'),
       ),
       body: Column(
         children: [
@@ -72,15 +76,15 @@ class _WorkoutListPageState extends State<WorkoutListPage> {
               onDayPressed: (DateTime date, List<Event> events) {
                 // Handle calendar day press event if needed
               },
-              weekendTextStyle: TextStyle(color: Colors.red),
+              weekendTextStyle: const TextStyle(color: Colors.red),
               thisMonthDayBorderColor: Colors.grey,
-              headerTextStyle: TextStyle(fontSize: 24.0),
-              weekdayTextStyle: TextStyle(color: Colors.black),
+              headerTextStyle: const TextStyle(fontSize: 24.0, color: Colors.teal),
+              weekdayTextStyle: const TextStyle(color: Colors.black),
               selectedDateTime: DateTime.now(),
               daysHaveCircularBorder: true,
               showOnlyCurrentMonthDate: true,
-              prevDaysTextStyle: TextStyle(fontSize: 16.0),
-              nextDaysTextStyle: TextStyle(fontSize: 16.0),
+              prevDaysTextStyle: const TextStyle(fontSize: 16.0),
+              nextDaysTextStyle: const TextStyle(fontSize: 16.0),
             ),
           ),
           Expanded(
@@ -98,19 +102,19 @@ class _WorkoutListPageState extends State<WorkoutListPage> {
                   },
                   background: Container(
                     alignment: Alignment.centerRight,
-                    padding: EdgeInsets.symmetric(horizontal: 16.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     color: Colors.red,
-                    child: Icon(
+                    child: const Icon(
                       Icons.delete,
                       color: Colors.white,
                     ),
                   ),
                   child: Card(
-                    margin: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                    margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                     child: ListTile(
                       title: Text(workout.exercise),
                       subtitle: Text('Date: ${workout.date.toString().substring(0, 10)}'),
-                      trailing: Icon(Icons.chevron_right),
+                      trailing: const Icon(Icons.chevron_right),
                       onTap: () {
                         Navigator.push(
                           context,
@@ -126,11 +130,11 @@ class _WorkoutListPageState extends State<WorkoutListPage> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
         onPressed: () async {
           final newWorkout = await Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => WorkoutInputPage()),
+            MaterialPageRoute(builder: (context) => const WorkoutInputPage()),
           );
 
           if (newWorkout != null) {
@@ -146,6 +150,8 @@ class _WorkoutListPageState extends State<WorkoutListPage> {
 }
 
 class WorkoutInputPage extends StatefulWidget {
+  const WorkoutInputPage({super.key});
+
   @override
   _WorkoutInputPageState createState() => _WorkoutInputPageState();
 }
@@ -167,19 +173,19 @@ class _WorkoutInputPageState extends State<WorkoutInputPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Workout'),
+        title: const Text('Add Workout'),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
-            padding: EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16.0),
             child: Form(
               key: _formKey,
               child: Column(
                 children: [
                   TextFormField(
                     controller: _exerciseController,
-                    decoration: InputDecoration(labelText: 'Exercise'),
+                    decoration: const InputDecoration(labelText: 'Exercise'),
                     validator: (value) {
                       if (value!.isEmpty) {
                         return 'Please enter an exercise';
@@ -189,7 +195,7 @@ class _WorkoutInputPageState extends State<WorkoutInputPage> {
                   ),
                   TextFormField(
                     controller: _setsController,
-                    decoration: InputDecoration(labelText: 'Sets'),
+                    decoration: const InputDecoration(labelText: 'Sets'),
                     keyboardType: TextInputType.number,
                     validator: (value) {
                       if (value!.isEmpty) {
@@ -198,15 +204,15 @@ class _WorkoutInputPageState extends State<WorkoutInputPage> {
                       return null;
                     },
                   ),
-                  SizedBox(height: 16.0),
+                  const SizedBox(height: 16.0),
                   Text(
                     'Set Data:',
-                    style: Theme.of(context).textTheme.headline6,
+                    style: Theme.of(context).textTheme.titleLarge,
                   ),
-                  SizedBox(height: 8.0),
+                  const SizedBox(height: 8.0),
                   ListView.builder(
                     shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     itemCount: _setData.length,
                     itemBuilder: (context, index) {
                       return SetInput(
@@ -224,9 +230,9 @@ class _WorkoutInputPageState extends State<WorkoutInputPage> {
                       );
                     },
                   ),
-                  SizedBox(height: 16.0),
+                  const SizedBox(height: 16.0),
                   ElevatedButton(
-                    child: Text('Add Set'),
+                    child: const Text('Add Set'),
                     onPressed: () {
                       setState(() {
                         final sets = int.parse(_setsController.text);
@@ -234,9 +240,9 @@ class _WorkoutInputPageState extends State<WorkoutInputPage> {
                       });
                     },
                   ),
-                  SizedBox(height: 16.0),
+                  const SizedBox(height: 16.0),
                   ElevatedButton(
-                    child: Text('Save'),
+                    child: const Text('Save'),
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         final exercise = _exerciseController.text;
@@ -268,7 +274,7 @@ class SetInput extends StatelessWidget {
   final ValueChanged<String> onRepsChanged;
   final ValueChanged<String> onWeightChanged;
 
-  SetInput({
+  const SetInput({super.key, 
     required this.setNumber,
     required this.onRepsChanged,
     required this.onWeightChanged,
@@ -280,15 +286,15 @@ class SetInput extends StatelessWidget {
       children: [
         Expanded(
           child: TextFormField(
-            decoration: InputDecoration(labelText: 'Reps'),
+            decoration: const InputDecoration(labelText: 'Reps'),
             keyboardType: TextInputType.number,
             onChanged: onRepsChanged,
           ),
         ),
-        SizedBox(width: 8.0),
+        const SizedBox(width: 8.0),
         Expanded(
           child: TextFormField(
-            decoration: InputDecoration(labelText: 'Weight'),
+            decoration: const InputDecoration(labelText: 'Weight'),
             keyboardType: TextInputType.number,
             onChanged: onWeightChanged,
           ),
@@ -301,35 +307,35 @@ class SetInput extends StatelessWidget {
 class WorkoutDetailPage extends StatelessWidget {
   final WorkoutLog workout;
 
-  WorkoutDetailPage(this.workout);
+  const WorkoutDetailPage(this.workout, {super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Workout Detail'),
+        title: const Text('Workout Detail'),
       ),
       body: SafeArea(
         child: Container(
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 'Exercise: ${workout.exercise}',
-                style: Theme.of(context).textTheme.headline6,
+                style: Theme.of(context).textTheme.titleLarge,
               ),
-              SizedBox(height: 8.0),
+              const SizedBox(height: 8.0),
               Text('Date: ${workout.date.toString().substring(0, 10)}'),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
               Text(
                 'Sets:',
-                style: Theme.of(context).textTheme.headline6,
+                style: Theme.of(context).textTheme.titleLarge,
               ),
-              SizedBox(height: 8.0),
+              const SizedBox(height: 8.0),
               ListView.builder(
                 shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 itemCount: workout.setData.length,
                 itemBuilder: (context, index) {
                   final setData = workout.setData[index];
