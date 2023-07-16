@@ -115,7 +115,7 @@ class _WorkoutListPageState extends State<WorkoutListPage> {
                     ),
                   ),
                   child: Card(
-                    color: Colors.teal,
+                    color: Colors.grey[400],
                     margin: const EdgeInsets.symmetric(
                         horizontal: 16.0, vertical: 8.0),
                     child: ListTile(
