@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart'
     show CalendarCarousel, Event;
 import 'package:flutter_calendar_carousel/classes/event.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
 
 class WorkoutLog {
   final String exercise;
@@ -138,7 +139,8 @@ class _WorkoutListPageState extends State<WorkoutListPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => WorkoutDetailPage(workout)),
+                            builder: (context) => WorkoutDetailPage(workout),
+                          ),
                         );
                       },
                     ),
@@ -221,8 +223,9 @@ class _WorkoutInputPageState extends State<WorkoutInputPage> {
                   TextFormField(
                     controller: _setsController,
                     decoration: const InputDecoration(
-                        labelText: 'Sets',
-                        labelStyle: TextStyle(color: Colors.white)),
+                      labelText: 'Sets',
+                      labelStyle: TextStyle(color: Colors.white),
+                    ),
                     keyboardType: TextInputType.number,
                     validator: (value) {
                       if (value!.isEmpty) {
@@ -267,7 +270,9 @@ class _WorkoutInputPageState extends State<WorkoutInputPage> {
                       setState(() {
                         final sets = int.parse(_setsController.text);
                         _setData = List.generate(
-                            sets, (_) => SetData(reps: 0, weight: 0.0));
+                          sets,
+                          (_) => SetData(reps: 0, weight: 0.0),
+                        );
                       });
                     },
                   ),
@@ -319,7 +324,9 @@ class SetInput extends StatelessWidget {
         Expanded(
           child: TextFormField(
             decoration: const InputDecoration(
-                labelText: 'Reps', labelStyle: TextStyle(color: Colors.white)),
+              labelText: 'Reps',
+              labelStyle: TextStyle(color: Colors.white),
+            ),
             keyboardType: TextInputType.number,
             onChanged: onRepsChanged,
           ),
@@ -328,8 +335,9 @@ class SetInput extends StatelessWidget {
         Expanded(
           child: TextFormField(
             decoration: const InputDecoration(
-                labelText: 'Weight',
-                labelStyle: TextStyle(color: Colors.white)),
+              labelText: 'Weight',
+              labelStyle: TextStyle(color: Colors.white),
+            ),
             keyboardType: TextInputType.number,
             onChanged: onWeightChanged,
           ),
@@ -356,11 +364,15 @@ class WorkoutDetailPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Exercise: ${workout.exercise}',
-                  style: Theme.of(context).textTheme.titleLarge),
+              Text(
+                'Exercise: ${workout.exercise}',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
               const SizedBox(height: 8.0),
-              Text('Date: ${workout.date.toString().substring(0, 10)}',
-                  style: Theme.of(context).textTheme.titleLarge),
+              Text(
+                'Date: ${workout.date.toString().substring(0, 10)}',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
               const SizedBox(height: 16.0),
               Text(
                 'Sets:',
@@ -376,21 +388,57 @@ class WorkoutDetailPage extends StatelessWidget {
                 itemCount: workout.setData.length,
                 itemBuilder: (context, index) {
                   final setData = workout.setData[index];
+                  final setNumber = index + 1;
                   return ListTile(
                     title: Text(
-                      'Set ${index + 1}',
+                      'Set $setNumber',
                       style: const TextStyle(color: Colors.white),
                     ),
                     subtitle: Text(
-                        'Reps: ${setData.reps}, Weight: ${setData.weight} lbs.',
-                        style: const TextStyle(color: Colors.white)),
+                      'Reps: ${setData.reps}, Weight: ${setData.weight} lbs.',
+                      style: const TextStyle(color: Colors.white),
+                    ),
                   );
                 },
+              ),
+              const SizedBox(height: 16.0),
+              SizedBox(
+                height: 200.0,
+                child: BarChart(
+                  workout: workout,
+                ),
               ),
             ],
           ),
         ),
       ),
+    );
+  }
+}
+
+class BarChart extends StatelessWidget {
+  final WorkoutLog workout;
+
+  const BarChart({Key? key, required this.workout}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final setData = workout.setData;
+
+    final List<charts.Series<SetData, String>> seriesList = [
+      charts.Series<SetData, String>(
+        id: 'Sets',
+        domainFn: (SetData set, _) => 'Set ${setData.indexOf(set) + 1}',
+        measureFn: (SetData set, _) => set.reps,
+        colorFn: (_, __) => charts.ColorUtil.fromDartColor(Colors.teal),
+        data: setData,
+      ),
+    ];
+
+    return charts.BarChart(
+      seriesList,
+      animate: true,
+      vertical: true,
     );
   }
 }
