@@ -32,7 +32,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -40,10 +40,10 @@ class MyApp extends StatelessWidget {
       title: 'Workout Log',
       theme: ThemeData(
         primarySwatch: Colors.teal,
-        scaffoldBackgroundColor: Colors.grey[800],
-        textTheme: TextTheme(
+        scaffoldBackgroundColor: Colors.grey[900],
+        textTheme: const TextTheme(
           titleLarge: TextStyle(
-            color: Colors.grey[800],
+            color: Colors.white,
             fontWeight: FontWeight.bold,
             fontSize: 20.0,
           ),
@@ -55,7 +55,7 @@ class MyApp extends StatelessWidget {
 }
 
 class WorkoutListPage extends StatefulWidget {
-  const WorkoutListPage({super.key});
+  const WorkoutListPage({Key? key}) : super(key: key);
 
   @override
   _WorkoutListPageState createState() => _WorkoutListPageState();
@@ -72,7 +72,9 @@ class _WorkoutListPageState extends State<WorkoutListPage> {
       ),
       body: Column(
         children: [
-          Expanded(
+          SizedBox(
+            height: 440,
+            width: 370, // Set the height of the calendar widget
             child: CalendarCarousel(
               onDayPressed: (DateTime date, List<Event> events) {
                 // Handle calendar day press event if needed
@@ -80,16 +82,17 @@ class _WorkoutListPageState extends State<WorkoutListPage> {
               weekendTextStyle: const TextStyle(color: Colors.white),
               thisMonthDayBorderColor: Colors.grey,
               headerTextStyle:
-                  const TextStyle(fontSize: 24.0, color: Colors.teal),
+                  const TextStyle(fontSize: 20.0, color: Colors.teal),
               weekdayTextStyle: const TextStyle(color: Colors.white),
               selectedDateTime: DateTime.now(),
               daysHaveCircularBorder: true,
               showOnlyCurrentMonthDate: true,
-              prevDaysTextStyle: const TextStyle(fontSize: 16.0),
-              nextDaysTextStyle: const TextStyle(fontSize: 16.0),
+              prevDaysTextStyle: const TextStyle(fontSize: 14.0),
+              nextDaysTextStyle: const TextStyle(fontSize: 14.0),
               selectedDayButtonColor: Colors.teal,
               selectedDayBorderColor: Colors.teal,
               selectedDayTextStyle: const TextStyle(color: Colors.white),
+              daysTextStyle: const TextStyle(color: Colors.white),
             ),
           ),
           Expanded(
@@ -115,7 +118,7 @@ class _WorkoutListPageState extends State<WorkoutListPage> {
                     ),
                   ),
                   child: Card(
-                    color: Colors.grey[400],
+                    color: Colors.grey[600],
                     margin: const EdgeInsets.symmetric(
                         horizontal: 16.0, vertical: 8.0),
                     child: ListTile(
@@ -127,7 +130,10 @@ class _WorkoutListPageState extends State<WorkoutListPage> {
                         'Date: ${workout.date.toString().substring(0, 10)}',
                         style: const TextStyle(color: Colors.white),
                       ),
-                      trailing: const Icon(Icons.chevron_right),
+                      trailing: const Icon(
+                        Icons.chevron_right,
+                        color: Colors.white,
+                      ),
                       onTap: () {
                         Navigator.push(
                           context,
@@ -164,7 +170,7 @@ class _WorkoutListPageState extends State<WorkoutListPage> {
 }
 
 class WorkoutInputPage extends StatefulWidget {
-  const WorkoutInputPage({super.key});
+  const WorkoutInputPage({Key? key}) : super(key: key);
 
   @override
   _WorkoutInputPageState createState() => _WorkoutInputPageState();
@@ -228,7 +234,10 @@ class _WorkoutInputPageState extends State<WorkoutInputPage> {
                   const SizedBox(height: 16.0),
                   Text(
                     'Set Data:',
-                    style: Theme.of(context).textTheme.titleLarge,
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleLarge!
+                        .copyWith(color: Colors.white),
                   ),
                   const SizedBox(height: 8.0),
                   ListView.builder(
@@ -297,11 +306,11 @@ class SetInput extends StatelessWidget {
   final ValueChanged<String> onWeightChanged;
 
   const SetInput({
-    super.key,
+    Key? key,
     required this.setNumber,
     required this.onRepsChanged,
     required this.onWeightChanged,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -309,7 +318,8 @@ class SetInput extends StatelessWidget {
       children: [
         Expanded(
           child: TextFormField(
-            decoration: const InputDecoration(labelText: 'Reps'),
+            decoration: const InputDecoration(
+                labelText: 'Reps', labelStyle: TextStyle(color: Colors.white)),
             keyboardType: TextInputType.number,
             onChanged: onRepsChanged,
           ),
@@ -317,7 +327,9 @@ class SetInput extends StatelessWidget {
         const SizedBox(width: 8.0),
         Expanded(
           child: TextFormField(
-            decoration: const InputDecoration(labelText: 'Weight'),
+            decoration: const InputDecoration(
+                labelText: 'Weight',
+                labelStyle: TextStyle(color: Colors.white)),
             keyboardType: TextInputType.number,
             onChanged: onWeightChanged,
           ),
@@ -330,7 +342,7 @@ class SetInput extends StatelessWidget {
 class WorkoutDetailPage extends StatelessWidget {
   final WorkoutLog workout;
 
-  const WorkoutDetailPage(this.workout, {super.key});
+  const WorkoutDetailPage(this.workout, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -347,11 +359,15 @@ class WorkoutDetailPage extends StatelessWidget {
               Text('Exercise: ${workout.exercise}',
                   style: Theme.of(context).textTheme.titleLarge),
               const SizedBox(height: 8.0),
-              Text('Date: ${workout.date.toString().substring(0, 10)}'),
+              Text('Date: ${workout.date.toString().substring(0, 10)}',
+                  style: Theme.of(context).textTheme.titleLarge),
               const SizedBox(height: 16.0),
               Text(
                 'Sets:',
-                style: Theme.of(context).textTheme.titleLarge,
+                style: Theme.of(context)
+                    .textTheme
+                    .titleLarge!
+                    .copyWith(color: Colors.white),
               ),
               const SizedBox(height: 8.0),
               ListView.builder(
@@ -361,9 +377,13 @@ class WorkoutDetailPage extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final setData = workout.setData[index];
                   return ListTile(
-                    title: Text('Set ${index + 1}'),
+                    title: Text(
+                      'Set ${index + 1}',
+                      style: const TextStyle(color: Colors.white),
+                    ),
                     subtitle: Text(
-                        'Reps: ${setData.reps}, Weight: ${setData.weight}'),
+                        'Reps: ${setData.reps}, Weight: ${setData.weight} lbs.',
+                        style: const TextStyle(color: Colors.white)),
                   );
                 },
               ),
