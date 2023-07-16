@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart' show CalendarCarousel, Event;
+import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart'
+    show CalendarCarousel, Event;
 import 'package:flutter_calendar_carousel/classes/event.dart';
 
 class WorkoutLog {
@@ -39,7 +40,7 @@ class MyApp extends StatelessWidget {
       title: 'Workout Log',
       theme: ThemeData(
         primarySwatch: Colors.teal,
-        scaffoldBackgroundColor: Colors.grey[200],
+        scaffoldBackgroundColor: Colors.grey[800],
         textTheme: TextTheme(
           titleLarge: TextStyle(
             color: Colors.grey[800],
@@ -76,15 +77,19 @@ class _WorkoutListPageState extends State<WorkoutListPage> {
               onDayPressed: (DateTime date, List<Event> events) {
                 // Handle calendar day press event if needed
               },
-              weekendTextStyle: const TextStyle(color: Colors.red),
+              weekendTextStyle: const TextStyle(color: Colors.white),
               thisMonthDayBorderColor: Colors.grey,
-              headerTextStyle: const TextStyle(fontSize: 24.0, color: Colors.teal),
-              weekdayTextStyle: const TextStyle(color: Colors.black),
+              headerTextStyle:
+                  const TextStyle(fontSize: 24.0, color: Colors.teal),
+              weekdayTextStyle: const TextStyle(color: Colors.white),
               selectedDateTime: DateTime.now(),
               daysHaveCircularBorder: true,
               showOnlyCurrentMonthDate: true,
               prevDaysTextStyle: const TextStyle(fontSize: 16.0),
               nextDaysTextStyle: const TextStyle(fontSize: 16.0),
+              selectedDayButtonColor: Colors.teal,
+              selectedDayBorderColor: Colors.teal,
+              selectedDayTextStyle: const TextStyle(color: Colors.white),
             ),
           ),
           Expanded(
@@ -110,15 +115,24 @@ class _WorkoutListPageState extends State<WorkoutListPage> {
                     ),
                   ),
                   child: Card(
-                    margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                    color: Colors.teal,
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: 16.0, vertical: 8.0),
                     child: ListTile(
-                      title: Text(workout.exercise),
-                      subtitle: Text('Date: ${workout.date.toString().substring(0, 10)}'),
+                      title: Text(
+                        workout.exercise,
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                      subtitle: Text(
+                        'Date: ${workout.date.toString().substring(0, 10)}',
+                        style: const TextStyle(color: Colors.white),
+                      ),
                       trailing: const Icon(Icons.chevron_right),
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => WorkoutDetailPage(workout)),
+                          MaterialPageRoute(
+                              builder: (context) => WorkoutDetailPage(workout)),
                         );
                       },
                     ),
@@ -185,7 +199,12 @@ class _WorkoutInputPageState extends State<WorkoutInputPage> {
                 children: [
                   TextFormField(
                     controller: _exerciseController,
-                    decoration: const InputDecoration(labelText: 'Exercise'),
+                    decoration: const InputDecoration(
+                      labelText: 'Exercise',
+                      labelStyle: TextStyle(
+                        color: Colors.white, // Set the desired text color
+                      ),
+                    ),
                     validator: (value) {
                       if (value!.isEmpty) {
                         return 'Please enter an exercise';
@@ -195,7 +214,9 @@ class _WorkoutInputPageState extends State<WorkoutInputPage> {
                   ),
                   TextFormField(
                     controller: _setsController,
-                    decoration: const InputDecoration(labelText: 'Sets'),
+                    decoration: const InputDecoration(
+                        labelText: 'Sets',
+                        labelStyle: TextStyle(color: Colors.white)),
                     keyboardType: TextInputType.number,
                     validator: (value) {
                       if (value!.isEmpty) {
@@ -236,7 +257,8 @@ class _WorkoutInputPageState extends State<WorkoutInputPage> {
                     onPressed: () {
                       setState(() {
                         final sets = int.parse(_setsController.text);
-                        _setData = List.generate(sets, (_) => SetData(reps: 0, weight: 0.0));
+                        _setData = List.generate(
+                            sets, (_) => SetData(reps: 0, weight: 0.0));
                       });
                     },
                   ),
@@ -274,7 +296,8 @@ class SetInput extends StatelessWidget {
   final ValueChanged<String> onRepsChanged;
   final ValueChanged<String> onWeightChanged;
 
-  const SetInput({super.key, 
+  const SetInput({
+    super.key,
     required this.setNumber,
     required this.onRepsChanged,
     required this.onWeightChanged,
@@ -321,10 +344,8 @@ class WorkoutDetailPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'Exercise: ${workout.exercise}',
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
+              Text('Exercise: ${workout.exercise}',
+                  style: Theme.of(context).textTheme.titleLarge),
               const SizedBox(height: 8.0),
               Text('Date: ${workout.date.toString().substring(0, 10)}'),
               const SizedBox(height: 16.0),
@@ -341,7 +362,8 @@ class WorkoutDetailPage extends StatelessWidget {
                   final setData = workout.setData[index];
                   return ListTile(
                     title: Text('Set ${index + 1}'),
-                    subtitle: Text('Reps: ${setData.reps}, Weight: ${setData.weight}'),
+                    subtitle: Text(
+                        'Reps: ${setData.reps}, Weight: ${setData.weight}'),
                   );
                 },
               ),
