@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
       title: 'Workout Log',
       theme: ThemeData(
         primarySwatch: Colors.teal,
-        scaffoldBackgroundColor: Colors.grey[900],
+        scaffoldBackgroundColor: const Color(0xFF2E2C42),
         textTheme: const TextTheme(
           titleLarge: TextStyle(
             color: Colors.white,
@@ -73,27 +73,32 @@ class _WorkoutListPageState extends State<WorkoutListPage> {
       ),
       body: Column(
         children: [
-          SizedBox(
-            height: 440,
-            width: 370, // Set the height of the calendar widget
-            child: CalendarCarousel(
-              onDayPressed: (DateTime date, List<Event> events) {
-                // Handle calendar day press event if needed
-              },
-              weekendTextStyle: const TextStyle(color: Colors.white),
-              thisMonthDayBorderColor: Colors.grey,
-              headerTextStyle:
-                  const TextStyle(fontSize: 20.0, color: Colors.teal),
-              weekdayTextStyle: const TextStyle(color: Colors.white),
-              selectedDateTime: DateTime.now(),
-              daysHaveCircularBorder: true,
-              showOnlyCurrentMonthDate: true,
-              prevDaysTextStyle: const TextStyle(fontSize: 14.0),
-              nextDaysTextStyle: const TextStyle(fontSize: 14.0),
-              selectedDayButtonColor: Colors.teal,
-              selectedDayBorderColor: Colors.teal,
-              selectedDayTextStyle: const TextStyle(color: Colors.white),
-              daysTextStyle: const TextStyle(color: Colors.white),
+          SingleChildScrollView(
+            physics: const NeverScrollableScrollPhysics(),
+            child: SizedBox(
+              height: 440,
+              width: 370,
+              child: CalendarCarousel(
+                onDayPressed: (DateTime date, List<Event> events) {
+                  // Handle calendar day press event if needed
+                },
+                weekendTextStyle:
+                    const TextStyle(color: Colors.white, fontSize: 12.0),
+                thisMonthDayBorderColor: Colors.grey,
+                headerTextStyle:
+                    const TextStyle(fontSize: 20.0, color: Colors.teal),
+                weekdayTextStyle: const TextStyle(color: Colors.white),
+                selectedDateTime: DateTime.now(),
+                daysHaveCircularBorder: true,
+                showOnlyCurrentMonthDate: true,
+                prevDaysTextStyle: const TextStyle(fontSize: 12.0),
+                nextDaysTextStyle: const TextStyle(fontSize: 12.0),
+                selectedDayButtonColor: Colors.teal,
+                selectedDayBorderColor: Colors.teal,
+                selectedDayTextStyle: const TextStyle(color: Colors.white),
+                daysTextStyle:
+                    const TextStyle(color: Colors.white, fontSize: 12.0),
+              ),
             ),
           ),
           Expanded(
@@ -119,7 +124,7 @@ class _WorkoutListPageState extends State<WorkoutListPage> {
                     ),
                   ),
                   child: Card(
-                    color: Colors.grey[600],
+                    color: const Color(0xFF2E2C42),
                     margin: const EdgeInsets.symmetric(
                         horizontal: 16.0, vertical: 8.0),
                     child: ListTile(
