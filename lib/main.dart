@@ -76,28 +76,28 @@ class _WorkoutListPageState extends State<WorkoutListPage> {
           SingleChildScrollView(
             physics: const NeverScrollableScrollPhysics(),
             child: SizedBox(
-              height: 440,
+              height: 420,
               width: 370,
               child: CalendarCarousel(
                 onDayPressed: (DateTime date, List<Event> events) {
                   // Handle calendar day press event if needed
                 },
                 weekendTextStyle:
-                    const TextStyle(color: Colors.white, fontSize: 12.0),
-                thisMonthDayBorderColor: Colors.grey,
+                    const TextStyle(color: Colors.white, fontSize: 14.0),
+                thisMonthDayBorderColor: Colors.transparent,
                 headerTextStyle:
-                    const TextStyle(fontSize: 20.0, color: Colors.teal),
+                    const TextStyle(fontSize: 20.0, color: Color(0xFF34D1C2)),
                 weekdayTextStyle: const TextStyle(color: Colors.white),
                 selectedDateTime: DateTime.now(),
                 daysHaveCircularBorder: true,
                 showOnlyCurrentMonthDate: true,
                 prevDaysTextStyle: const TextStyle(fontSize: 12.0),
                 nextDaysTextStyle: const TextStyle(fontSize: 12.0),
-                selectedDayButtonColor: Colors.teal,
-                selectedDayBorderColor: Colors.teal,
+                selectedDayButtonColor: const Color(0xFF34D1C2),
+                selectedDayBorderColor: const Color(0xFF34D1C2),
                 selectedDayTextStyle: const TextStyle(color: Colors.white),
                 daysTextStyle:
-                    const TextStyle(color: Colors.white, fontSize: 12.0),
+                    const TextStyle(color: Colors.white, fontSize: 14.0),
               ),
             ),
           ),
@@ -156,21 +156,36 @@ class _WorkoutListPageState extends State<WorkoutListPage> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
-        onPressed: () async {
-          final newWorkout = await Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const WorkoutInputPage()),
-          );
+      floatingActionButton: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Color(0xFF34D1C2),
+              Color(0xFF31A6DC)
+            ], // Specify your gradient colors
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          shape: BoxShape.circle,
+        ),
+        child: FloatingActionButton(
+          onPressed: () async {
+            final newWorkout = await Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const WorkoutInputPage()),
+            );
 
-          if (newWorkout != null) {
-            setState(() {
-              _workoutLogs.add(newWorkout);
-              _workoutLogs.sort((a, b) => b.date.compareTo(a.date));
-            });
-          }
-        },
+            if (newWorkout != null) {
+              setState(() {
+                _workoutLogs.add(newWorkout);
+                _workoutLogs.sort((a, b) => b.date.compareTo(a.date));
+              });
+            }
+          },
+          backgroundColor: Colors.transparent,
+          child:
+              const Icon(Icons.add), // Set the background color to transparent
+        ),
       ),
     );
   }
