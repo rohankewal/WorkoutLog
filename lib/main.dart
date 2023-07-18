@@ -286,6 +286,7 @@ class _WorkoutInputPageState extends State<WorkoutInputPage> {
                         color: Colors.white,
                       ),
                     ),
+                    style: const TextStyle(color: Colors.white),
                     validator: (value) {
                       if (value!.isEmpty) {
                         return 'Please enter an exercise';
@@ -299,6 +300,7 @@ class _WorkoutInputPageState extends State<WorkoutInputPage> {
                       labelText: 'Sets',
                       labelStyle: TextStyle(color: Colors.white),
                     ),
+                    style: const TextStyle(color: Colors.white),
                     keyboardType: TextInputType.number,
                     validator: (value) {
                       if (value!.isEmpty) {
@@ -338,7 +340,7 @@ class _WorkoutInputPageState extends State<WorkoutInputPage> {
                   ),
                   const SizedBox(height: 16.0),
                   ElevatedButton(
-                    child: const Text('Add Set'),
+                    child: const Text('Add Set(s)'),
                     onPressed: () {
                       setState(() {
                         final sets = int.parse(_setsController.text);
@@ -400,6 +402,7 @@ class SetInput extends StatelessWidget {
               labelText: 'Reps',
               labelStyle: TextStyle(color: Colors.white),
             ),
+            style: const TextStyle(color: Colors.white),
             keyboardType: TextInputType.number,
             onChanged: onRepsChanged,
           ),
@@ -411,6 +414,7 @@ class SetInput extends StatelessWidget {
               labelText: 'Weight',
               labelStyle: TextStyle(color: Colors.white),
             ),
+            style: const TextStyle(color: Colors.white),
             keyboardType: TextInputType.number,
             onChanged: onWeightChanged,
           ),
@@ -503,7 +507,8 @@ class BarChart extends StatelessWidget {
         id: 'Sets',
         domainFn: (SetData set, _) => 'Set ${setData.indexOf(set) + 1}',
         measureFn: (SetData set, _) => set.reps.toDouble(),
-        colorFn: (_, __) => charts.ColorUtil.fromDartColor(Colors.teal),
+        colorFn: (_, __) =>
+            charts.ColorUtil.fromDartColor(const Color(0xFF34D1C2)),
         data: setData,
       ),
     ];
