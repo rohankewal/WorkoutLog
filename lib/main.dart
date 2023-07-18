@@ -78,7 +78,7 @@ class _WorkoutListPageState extends State<WorkoutListPage> {
             child: SizedBox(
               height: 420,
               width: 370,
-              child: CalendarCarousel(
+              child: CalendarCarousel<Event>(
                 onDayPressed: (DateTime date, List<Event> events) {
                   // Handle calendar day press event if needed
                 },
@@ -94,10 +94,64 @@ class _WorkoutListPageState extends State<WorkoutListPage> {
                 prevDaysTextStyle: const TextStyle(fontSize: 12.0),
                 nextDaysTextStyle: const TextStyle(fontSize: 12.0),
                 selectedDayButtonColor: const Color(0xFF34D1C2),
-                selectedDayBorderColor: const Color(0xFF34D1C2),
+                selectedDayBorderColor: Colors.transparent,
                 selectedDayTextStyle: const TextStyle(color: Colors.white),
                 daysTextStyle:
                     const TextStyle(color: Colors.white, fontSize: 14.0),
+                dayButtonColor: Colors.transparent,
+                // weekendDayButtonColor: Colors.transparent,
+                todayButtonColor: Colors.transparent,
+                todayBorderColor: Colors.yellow,
+                customDayBuilder: (
+                  /// you can provide your own build function to make custom day containers
+                  bool isSelectable,
+                  int index,
+                  bool isSelectedDay,
+                  bool isToday,
+                  bool isPrevMonthDay,
+                  TextStyle textStyle,
+                  bool isNextMonthDay,
+                  bool isThisMonthDay,
+                  DateTime day,
+                ) {
+                  // Adjust the colors and gradient as per your requirement
+                  Color? textColor = isSelectable ? Colors.white : Colors.grey;
+                  Color? boxColor = isSelectedDay
+                      ? const Color(0xFF34D1C2)
+                      : Colors.transparent;
+                  if (isToday) {
+                    boxColor = Colors.yellow;
+                  }
+                  if (isPrevMonthDay || isNextMonthDay) {
+                    textColor = Colors.grey;
+                  }
+                  return Center(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: boxColor,
+                        gradient: isSelectedDay
+                            ? const LinearGradient(
+                                colors: [
+                                  Color(0xFF34D1C2),
+                                  Color(0xFF31A6DC),
+                                ],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              )
+                            : null,
+                      ),
+                      child: Center(
+                        child: Text(
+                          '${day.day}',
+                          style: textStyle.copyWith(
+                            color: textColor,
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                },
               ),
             ),
           ),
@@ -161,8 +215,8 @@ class _WorkoutListPageState extends State<WorkoutListPage> {
           gradient: LinearGradient(
             colors: [
               Color(0xFF34D1C2),
-              Color(0xFF31A6DC)
-            ], // Specify your gradient colors
+              Color(0xFF31A6DC),
+            ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -183,8 +237,7 @@ class _WorkoutListPageState extends State<WorkoutListPage> {
             }
           },
           backgroundColor: Colors.transparent,
-          child:
-              const Icon(Icons.add), // Set the background color to transparent
+          child: const Icon(Icons.add),
         ),
       ),
     );
@@ -230,7 +283,7 @@ class _WorkoutInputPageState extends State<WorkoutInputPage> {
                     decoration: const InputDecoration(
                       labelText: 'Exercise',
                       labelStyle: TextStyle(
-                        color: Colors.white, // Set the desired text color
+                        color: Colors.white,
                       ),
                     ),
                     validator: (value) {
@@ -449,7 +502,7 @@ class BarChart extends StatelessWidget {
       charts.Series<SetData, String>(
         id: 'Sets',
         domainFn: (SetData set, _) => 'Set ${setData.indexOf(set) + 1}',
-        measureFn: (SetData set, _) => set.reps,
+        measureFn: (SetData set, _) => set.reps.toDouble(),
         colorFn: (_, __) => charts.ColorUtil.fromDartColor(Colors.teal),
         data: setData,
       ),
