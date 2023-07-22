@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart'
-    show CalendarCarousel, Event;
+    show CalendarCarousel;
 import 'package:flutter_calendar_carousel/classes/event.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
@@ -78,80 +78,79 @@ class _WorkoutListPageState extends State<WorkoutListPage> {
             child: SizedBox(
               height: 420,
               width: 370,
-              child: CalendarCarousel<Event>(
-                onDayPressed: (DateTime date, List<Event> events) {
-                  // Handle calendar day press event if needed
-                },
-                weekendTextStyle:
-                    const TextStyle(color: Colors.white, fontSize: 14.0),
-                thisMonthDayBorderColor: Colors.transparent,
-                headerTextStyle:
-                    const TextStyle(fontSize: 20.0, color: Color(0xFF34D1C2)),
-                weekdayTextStyle: const TextStyle(color: Colors.white),
-                selectedDateTime: DateTime.now(),
-                daysHaveCircularBorder: true,
-                showOnlyCurrentMonthDate: true,
-                prevDaysTextStyle: const TextStyle(fontSize: 12.0),
-                nextDaysTextStyle: const TextStyle(fontSize: 12.0),
-                selectedDayButtonColor: const Color(0xFF34D1C2),
-                selectedDayBorderColor: Colors.transparent,
-                selectedDayTextStyle: const TextStyle(color: Colors.white),
-                daysTextStyle:
-                    const TextStyle(color: Colors.white, fontSize: 14.0),
-                dayButtonColor: Colors.transparent,
-                // weekendDayButtonColor: Colors.transparent,
-                todayButtonColor: Colors.transparent,
-                todayBorderColor: Colors.yellow,
-                customDayBuilder: (
-                  /// you can provide your own build function to make custom day containers
-                  bool isSelectable,
-                  int index,
-                  bool isSelectedDay,
-                  bool isToday,
-                  bool isPrevMonthDay,
-                  TextStyle textStyle,
-                  bool isNextMonthDay,
-                  bool isThisMonthDay,
-                  DateTime day,
-                ) {
-                  // Adjust the colors and gradient as per your requirement
-                  Color? textColor = isSelectable ? Colors.white : Colors.grey;
-                  Color? boxColor = isSelectedDay
-                      ? const Color(0xFF34D1C2)
-                      : Colors.transparent;
-                  if (isToday) {
-                    boxColor = Colors.yellow;
-                  }
-                  if (isPrevMonthDay || isNextMonthDay) {
-                    textColor = Colors.grey;
-                  }
-                  return Center(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: boxColor,
-                        gradient: isSelectedDay
-                            ? const LinearGradient(
-                                colors: [
-                                  Color(0xFF34D1C2),
-                                  Color(0xFF31A6DC),
-                                ],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                              )
-                            : null,
-                      ),
-                      child: Center(
-                        child: Text(
-                          '${day.day}',
-                          style: textStyle.copyWith(
-                            color: textColor,
+              child: Card(
+                color: const Color(0xFF2E2C42),
+                elevation: 5,
+                child: CalendarCarousel(
+                  onDayPressed: (DateTime date, List<Event> events) {
+                    // Handle calendar day press event if needed
+                  },
+                  weekendTextStyle:
+                      const TextStyle(color: Colors.white, fontSize: 14.0),
+                  thisMonthDayBorderColor: Colors.transparent,
+                  headerTextStyle:
+                      const TextStyle(fontSize: 20.0, color: Color(0xFF34D1C2)),
+                  weekdayTextStyle: const TextStyle(color: Colors.white),
+                  selectedDateTime: DateTime.now(),
+                  daysHaveCircularBorder: true,
+                  showOnlyCurrentMonthDate: true,
+                  prevDaysTextStyle: const TextStyle(fontSize: 12.0),
+                  nextDaysTextStyle: const TextStyle(fontSize: 12.0),
+                  selectedDayButtonColor: const Color(0xFF34D1C2),
+                  selectedDayBorderColor: Colors.transparent,
+                  selectedDayTextStyle: const TextStyle(color: Colors.white),
+                  daysTextStyle:
+                      const TextStyle(color: Colors.white, fontSize: 14.0),
+                  customDayBuilder: (
+                    bool isSelectable,
+                    int index,
+                    bool isSelectedDay,
+                    bool isToday,
+                    bool isPrevMonthDay,
+                    TextStyle textStyle,
+                    bool isNextMonthDay,
+                    bool isThisMonthDay,
+                    DateTime day,
+                  ) {
+                    Color? textColor =
+                        isSelectable ? Colors.white : Colors.grey;
+                    Color? boxColor = isSelectedDay
+                        ? const Color(0xFF34D1C2)
+                        : Colors.transparent;
+                    if (isToday) {
+                      boxColor = Colors.yellow;
+                    }
+                    if (isPrevMonthDay || isNextMonthDay) {
+                      textColor = Colors.grey;
+                    }
+                    return Center(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: boxColor,
+                          gradient: isSelectedDay
+                              ? const LinearGradient(
+                                  colors: [
+                                    Color(0xFF34D1C2),
+                                    Color(0xFF31A6DC),
+                                  ],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                )
+                              : null,
+                        ),
+                        child: Center(
+                          child: Text(
+                            '${day.day}',
+                            style: textStyle.copyWith(
+                              color: textColor,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
             ),
           ),
@@ -160,50 +159,75 @@ class _WorkoutListPageState extends State<WorkoutListPage> {
               itemCount: _workoutLogs.length,
               itemBuilder: (context, index) {
                 final workout = _workoutLogs[index];
-                return Dismissible(
-                  key: UniqueKey(),
-                  direction: DismissDirection.endToStart,
-                  onDismissed: (direction) {
-                    setState(() {
-                      _workoutLogs.removeAt(index);
-                    });
-                  },
-                  background: Container(
-                    alignment: Alignment.centerRight,
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    color: Colors.red,
-                    child: const Icon(
-                      Icons.delete,
-                      color: Colors.white,
-                    ),
-                  ),
-                  child: Card(
-                    color: const Color(0xFF2E2C42),
-                    margin: const EdgeInsets.symmetric(
-                        horizontal: 16.0, vertical: 8.0),
-                    child: ListTile(
-                      title: Text(
-                        workout.exercise,
-                        style: const TextStyle(color: Colors.white),
+
+                final bool showHeader = index == 0 ||
+                    _workoutLogs[index].date.day !=
+                        _workoutLogs[index - 1].date.day;
+
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (showHeader)
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16.0, vertical: 8.0),
+                        color: const Color(0xFF2E2C42),
+                        child: Text(
+                          workout.date.toString().substring(0, 10),
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold),
+                        ),
                       ),
-                      subtitle: Text(
-                        'Date: ${workout.date.toString().substring(0, 10)}',
-                        style: const TextStyle(color: Colors.white),
-                      ),
-                      trailing: const Icon(
-                        Icons.chevron_right,
-                        color: Colors.white,
-                      ),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => WorkoutDetailPage(workout),
-                          ),
-                        );
+                    Dismissible(
+                      key: UniqueKey(),
+                      direction: DismissDirection.endToStart,
+                      onDismissed: (direction) {
+                        setState(() {
+                          _workoutLogs.removeAt(index);
+                        });
                       },
+                      background: Container(
+                        alignment: Alignment.centerRight,
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        color: Colors.red,
+                        child: const Icon(
+                          Icons.delete,
+                          color: Colors.white,
+                        ),
+                      ),
+                      child: Card(
+                        color: const Color(0xFF2E2C42),
+                        elevation: 5,
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 16.0, vertical: 8.0),
+                        child: ListTile(
+                          title: Text(
+                            workout.exercise,
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                          subtitle: Text(
+                            'Date: ${workout.date.toString().substring(0, 10)}',
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                          trailing: const Icon(
+                            Icons.chevron_right,
+                            color: Colors.white,
+                          ),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    WorkoutDetailPage(workout),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 );
               },
             ),
@@ -340,7 +364,7 @@ class _WorkoutInputPageState extends State<WorkoutInputPage> {
                   ),
                   const SizedBox(height: 16.0),
                   ElevatedButton(
-                    child: const Text('Add Set(s)'),
+                    child: const Text('Add Set'),
                     onPressed: () {
                       setState(() {
                         final sets = int.parse(_setsController.text);
@@ -446,10 +470,6 @@ class WorkoutDetailPage extends StatelessWidget {
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               const SizedBox(height: 8.0),
-              Text(
-                'Date: ${workout.date.toString().substring(0, 10)}',
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
               const SizedBox(height: 16.0),
               Text(
                 'Sets:',
@@ -479,10 +499,45 @@ class WorkoutDetailPage extends StatelessWidget {
                 },
               ),
               const SizedBox(height: 16.0),
-              SizedBox(
-                height: 200.0,
-                child: BarChart(
-                  workout: workout,
+              Card(
+                color: const Color(0xFF2E2C42),
+                elevation: 5,
+                child: Container(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text.rich(
+                        TextSpan(
+                          children: [
+                            WidgetSpan(
+                              child: Icon(
+                                Icons.bar_chart_outlined,
+                                color: Color(0xFF31A6DC),
+                              ),
+                            ),
+                            TextSpan(
+                                text: ' Progress Chart',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold)),
+                          ],
+                        ),
+                      ),
+                      const Divider(
+                        color: Colors.grey,
+                        thickness: 1.0,
+                        height: 15.0,
+                      ),
+                      SizedBox(
+                        height: 200.0,
+                        child: BarChart(
+                          workout: workout,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],
@@ -505,8 +560,8 @@ class BarChart extends StatelessWidget {
     final List<charts.Series<SetData, String>> seriesList = [
       charts.Series<SetData, String>(
         id: 'Sets',
-        domainFn: (SetData set, _) => 'Set ${setData.indexOf(set) + 1}',
-        measureFn: (SetData set, _) => set.reps.toDouble(),
+        domainFn: (SetData set, _) => set.reps.toString(),
+        measureFn: (SetData set, _) => set.weight,
         colorFn: (_, __) =>
             charts.ColorUtil.fromDartColor(const Color(0xFF34D1C2)),
         data: setData,
